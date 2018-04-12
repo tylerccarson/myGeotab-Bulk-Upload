@@ -1,0 +1,88 @@
+ul > li{
+  margin-bottom:20px;
+}
+ul > li > ul > li {
+  margin-bottom:10px;
+}
+.container{
+  padding:10px;
+}
+.checkmateFormPage legend{
+  margin:0px;
+}
+.checkmateFormPage fieldset.inset{
+  border:1px solid #56a1d5;
+}
+#toolOptions section{
+  margin-top:10px;
+}
+#contentContainer{
+  margin:20px;
+  position:relative;
+  overflow:hidden;
+}
+#contentContainer textarea{
+  min-height: 200px;
+  margin: 2px 0px;
+  resize: vertical;
+  max-height: 600px;
+}
+#outputArea{
+  background-color: #f7f7f7;
+  color: #888;
+  border:1px solid #000000;
+  padding: 0px 10px;
+  margin: 2px 0px;
+  box-sizing: border-box;
+  min-height:206px;
+  overflow:auto;
+  resize: vertical;
+  max-height: 606px;
+}
+.leftBox{
+  width:55%;
+  float:left;
+}
+.rightBox{
+  width:43%;
+  float:right;
+}
+.badData{
+  color:#bd362f;
+}
+.geotabButton:hover{
+  font-weight:bold;
+}
+#expectedInputSelectorContainer fieldset{
+  min-height:48px;
+}
+#expectedInputSelectorContainer label{
+  display:inline;
+}
+#contentTabs span{
+  font-weight: 700;
+  color: #2c7ab1;
+  text-transform: uppercase;
+  padding-left:20px;
+  box-sizing: border-box;
+}
+#progressContainer{
+  height:60px;
+}
+#actionContainer{
+  text-align:center;
+  margin-bottom:15px;
+}
+#status{
+  color:#666666;
+  margin-left:10px;
+  margin-bottom:5px;
+  float:left;
+}
+#progressPercentage{
+  margin-bottom:5px;
+  float:right;
+  color:#666666;
+  font-weight:bold;
+  margin-right:10px;
+}
