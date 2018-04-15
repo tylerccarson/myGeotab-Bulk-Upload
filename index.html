@@ -22,7 +22,7 @@
 
       <div class="container bordered">
         <div class="checkmatePageHeader">
-          <h1 class="checkmatePageName">Bulk Upload Tool 1.0.0<span class="subdued"> by Tyler</span></h1>
+          <h1 class="checkmatePageName">Bulk Upload Tool 1.0.0</h1>
         </div>
         <div id="signin-content"></div>
 
@@ -55,78 +55,86 @@
 
           </form>
 
-        <div id="contentContainer">
-          <div id="contentTabs">
-            <span class="leftBox">Input</span>
-            <span class="rightBox">Output</span>
+          <div id="contentContainer">
+            <div id="contentTabs">
+              <span class="leftBox">Input</span>
+              <span class="rightBox">Output</span>
+            </div>
+            <textarea class="leftBox" id="inputArea"></textarea>
+            <div class="rightBox" id="outputArea"></div>
           </div>
-          <textarea class="leftBox" id="inputArea"></textarea>
-          <div class="rightBox" id="outputArea"></div>
+
+          <div id="progressContainer">
+            <span id="status"></span>
+            <span id="progressPercentage"></span>
+            <progress value="0" max="100" style="display:none"></progress>
+          </div>
+
+          <div id="actionContainer">
+            <button class="geotabButton" id="runAnalyze">Analyze</button>
+            <button class="geotabButton" id="runEdit">Edit</button>
+            <button class="geotabButton" id="runAdd">Add</button>
+          </div>
         </div>
-        <div id="progressContainer">
-          <span id="status"></span>
-          <span id="progressPercentage"></span>
-          <progress value="0" max="100" style="display:none"></progress>
+
+      </div>
+
+      <footer>
+        <div class="container footernotes">
+          <p>Source code was borrowed from Mauricio's Bulk Edit Tool provided to assist resellers. It was created using the <a href="//www.geotab.com/support/forum/software/developer-discussion" target="_blank">Geotab SDK</a>.</p>
+          <p>Created on Feb-2014. Last updated on Apr-12-2018</p>
         </div>
-        <div id="actionContainer">
-          <button class="geotabButton" id="runAnalyze">Analyze</button>
-          <button class="geotabButton" id="runEdit">Submit</button>
-        </div>
-            </div>
-        </div>
-        <footer>
-            <div class="container footernotes">
-                <p>Source code was borrowed from Mauricio's Bulk Edit Tool provided to assist resellers. It was created using the <a href="//www.geotab.com/support/forum/software/developer-discussion" target="_blank">Geotab SDK</a>.</p>
-                <p>Created on Feb-2014. Last updated on Apr-12-2018</p>
-            </div>
-        </footer>
-    <div id="help-content">
-            <h2>Help</h2>
-            <p>
-                <strong>Overview</strong><br />
-                This utility helps you edit assets in bulk by using comma separated values (CSV).
-            </p>
-            <p>
-                <strong>Work flow</strong><br />
-                <ol>
-          <li>Select your asset type</li>
-          <li>Select the properties that you wish to edit</li>
-          <li>Paste the data into the Input field</li>
-          <li>Analyze or Submit</li>
-        </ol>
-            </p>
-      <p>
-                <strong>Gotcha's</strong><br>
-        <ul>
-          <li><strong>Groups</strong>: Groups must not have trailing or leading spaces and they must be separated by <b>;</b>
-          <br>Also important to note is the system name for the default Entire Organization group, "GroupCompanyId"</li>
-                    <!-- Zendesk#279469 - Update help to reflect that assets are always referenced by ID in Input field (LMIT Aug 23 2016)
-                    -->
-          <li><strong>NFC Keys</strong>: MyGeotab does not allow duplicate keys in the database. If re-using you must clear keys prior to assigning them to a new driver. You can do this in bulk by passing through "CLEARKEY" as the NFC Key ID</li>
-          <li><strong>Expire Zone/Device/User</strong>: Expected value is a boolean, either TRUE or FALSE. TRUE will make the entity HISTORICAL, FALSE will activate the entity(will not work for Devices as SN is remvoed)</li>
-          <li><strong>Security Levels</strong>: The system ID's, which need to be used, for the default security levels are:
+      </footer>
+
+      <div id="help-content">
+        <h2>Help</h2>
+        <p>
+          <strong>Overview</strong><br />
+          This utility helps you edit assets in bulk by using comma separated values (CSV).
+        </p>
+        <p>
+          <strong>Work flow</strong><br />
+          <ol>
+            <li>Select your asset type</li>
+            <li>Select the properties that you wish to edit</li>
+            <li>Paste the data into the Input field</li>
+            <li>Analyze or Submit</li>
+          </ol>
+        </p>
+        <p>
+          <strong>Gotcha's</strong><br>
           <ul>
-            <li><u>Administrator:</u> GroupEverythingSecurityId</li>
-            <li><u>Default user:</u> GroupUserSecurityId</li>
-            <li><u>Supervisor:</u> GroupSupervisorSecurityId</li>
-            <li><u>View Only:</u> GroupViewOnlySecurityId</li>
-            <li><u>Nothing:</u> GroupNothingSecurityId</li>
-          </ul></li>
-          <li><strong>Time Zone</strong>: MyGeotab uses Olson Time Zones, you can see a list of them at this <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">link</a></li>
-          <li><strong>Work Schedule</strong>: The system names, which need to be used, for the default work schedules are:
-          <ul>
-            <li><u>Standard Hours:</u> WorkTimeStandardHoursId</li>
-            <li><u>Lunch Hours:</u> WorkTimeLunchHoursId</li>
-            <li><u>Early Leave Hours:</u> WorkTimeEarlyLeaveHoursId</li>
-            <li><u>Late Arrival Hours:</u> WorkTimeLateArrivalHoursId</li>
-            <li><u>All Hours:</u> WorkTimeAllHoursId</li>
-          </ul></li>
-        </ul>                
-            </p>
-        </div>
-    <script src="js/api.js"></script>
-    <script src="js/login2.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="js/index.js"></script>
+            <li><strong>Groups</strong>: Groups must not have trailing or leading spaces and they must be separated by <b>;</b>
+            <br>Also important to note is the system name for the default Entire Organization group, "GroupCompanyId"</li>
+                      <!-- Zendesk#279469 - Update help to reflect that assets are always referenced by ID in Input field (LMIT Aug 23 2016)
+                      -->
+            <li><strong>NFC Keys</strong>: MyGeotab does not allow duplicate keys in the database. If re-using you must clear keys prior to assigning them to a new driver. You can do this in bulk by passing through "CLEARKEY" as the NFC Key ID</li>
+            <li><strong>Expire Zone/Device/User</strong>: Expected value is a boolean, either TRUE or FALSE. TRUE will make the entity HISTORICAL, FALSE will activate the entity(will not work for Devices as SN is remvoed)</li>
+            <li><strong>Security Levels</strong>: The system ID's, which need to be used, for the default security levels are:
+            <ul>
+              <li><u>Administrator:</u> GroupEverythingSecurityId</li>
+              <li><u>Default user:</u> GroupUserSecurityId</li>
+              <li><u>Supervisor:</u> GroupSupervisorSecurityId</li>
+              <li><u>View Only:</u> GroupViewOnlySecurityId</li>
+              <li><u>Nothing:</u> GroupNothingSecurityId</li>
+            </ul></li>
+            <li><strong>Time Zone</strong>: MyGeotab uses Olson Time Zones, you can see a list of them at this <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">link</a></li>
+            <li><strong>Work Schedule</strong>: The system names, which need to be used, for the default work schedules are:
+            <ul>
+              <li><u>Standard Hours:</u> WorkTimeStandardHoursId</li>
+              <li><u>Lunch Hours:</u> WorkTimeLunchHoursId</li>
+              <li><u>Early Leave Hours:</u> WorkTimeEarlyLeaveHoursId</li>
+              <li><u>Late Arrival Hours:</u> WorkTimeLateArrivalHoursId</li>
+              <li><u>All Hours:</u> WorkTimeAllHoursId</li>
+            </ul></li>
+          </ul>                
+        </p>
+      </div>
+
+      <script src="js/api.js"></script>
+      <script src="js/login2.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="js/index.js"></script>
+
     </body>
 </html>
