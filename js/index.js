@@ -10,8 +10,7 @@ To-dos:
 
 1) Odometer offset doesn't update! --> probably has to do with the fact you can only send data to one database
 2) Add more properties for device upload (engine hours, ...)
-3) Don't need to update blank squares?
-4) Host in an S3 bucket
+5) Testing!
 
 **/
 
