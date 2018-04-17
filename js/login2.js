@@ -72,7 +72,7 @@ var initializeSignIn = function() {
     // When developing with the SDK samples, it you may find that signing in every time you refresh the page
     // gets in the way of what you're doing. Set the boolean below to true, and fill in the information to
     // automatically populate the sign in form.
-    var debugEnabled = true,
+    var debugEnabled = true;
         debugServer = "my.geotab.com",
         debugDatabase = "tyler_testing",
         debugEmail = "tyler.c.carson@gmail.com",

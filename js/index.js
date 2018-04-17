@@ -3,14 +3,12 @@ availableProperties = '{"device":[{ "name":"Groups", "id":"deviceGroupIndex", "p
 colorList = {aliceblue: 'f0f8ff', antiquewhite: 'faebd7', aqua: '00ffff', aquamarine: '7fffd4', azure: 'f0ffff', beige: 'f5f5dc', bisque: 'ffe4c4', black: '000000', blanchedalmond: 'ffebcd', blue: '0000ff', blueviolet: '8a2be2', brown: 'a52a2a', burlywood: 'deb887', cadetblue: '5f9ea0', chartreuse: '7fff00', chocolate: 'd2691e', coral: 'ff7f50', cornflowerblue: '6495ed', cornsilk: 'fff8dc', crimson: 'dc143c', cyan: '00ffff', darkblue: '00008b', darkcyan: '008b8b', darkgoldenrod: 'b8860b', darkgray: 'a9a9a9', darkgreen: '006400', darkkhaki: 'bdb76b', darkmagenta: '8b008b', darkolivegreen: '556b2f', darkorange: 'ff8c00', darkorchid: '9932cc', darkred: '8b0000', darksalmon: 'e9967a', darkseagreen: '8fbc8f', darkslateblue: '483d8b', darkslategray: '2f4f4f', darkturquoise: '00ced1', darkviolet: '9400d3', deeppink: 'ff1493', deepskyblue: '00bfff', dimgray: '696969', dodgerblue: '1e90ff', feldspar: 'd19275', firebrick: 'b22222', floralwhite: 'fffaf0', forestgreen: '228b22', fuchsia: 'ff00ff', gainsboro: 'dcdcdc', ghostwhite: 'f8f8ff', gold: 'ffd700', goldenrod: 'daa520', gray: '808080', green: '008000', greenyellow: 'adff2f', honeydew: 'f0fff0', hotpink: 'ff69b4', indianred : 'cd5c5c', indigo : '4b0082', ivory: 'fffff0', khaki: 'f0e68c', lavender: 'e6e6fa', lavenderblush: 'fff0f5', lawngreen: '7cfc00', lemonchiffon: 'fffacd', lightblue: 'add8e6', lightcoral: 'f08080', lightcyan: 'e0ffff', lightgoldenrodyellow: 'fafad2', lightgrey: 'd3d3d3', lightgreen: '90ee90', lightpink: 'ffb6c1', lightsalmon: 'ffa07a', lightseagreen: '20b2aa', lightskyblue: '87cefa', lightslateblue: '8470ff', lightslategray: '778899', lightsteelblue: 'b0c4de', lightyellow: 'ffffe0', lime: '00ff00', limegreen: '32cd32', linen: 'faf0e6', magenta: 'ff00ff', maroon: '800000', mediumaquamarine: '66cdaa', mediumblue: '0000cd', mediumorchid: 'ba55d3', mediumpurple: '9370d8', mediumseagreen: '3cb371', mediumslateblue: '7b68ee', mediumspringgreen: '00fa9a', mediumturquoise: '48d1cc', mediumvioletred: 'c71585', midnightblue: '191970', mintcream: 'f5fffa', mistyrose: 'ffe4e1', moccasin: 'ffe4b5', navajowhite: 'ffdead', navy: '000080', oldlace: 'fdf5e6', olive: '808000', olivedrab: '6b8e23', orange: 'ffa500', orangered: 'ff4500', orchid: 'da70d6', palegoldenrod: 'eee8aa', palegreen: '98fb98', paleturquoise: 'afeeee', palevioletred: 'd87093', papayawhip: 'ffefd5', peachpuff: 'ffdab9', peru: 'cd853f', pink: 'ffc0cb', plum: 'dda0dd', powderblue: 'b0e0e6', purple: '800080', red: 'ff0000', rosybrown: 'bc8f8f', royalblue: '4169e1', saddlebrown: '8b4513', salmon: 'fa8072', sandybrown: 'f4a460', seagreen: '2e8b57', seashell: 'fff5ee', sienna: 'a0522d', silver: 'c0c0c0', skyblue: '87ceeb', slateblue: '6a5acd', slategray: '708090', snow: 'fffafa', springgreen: '00ff7f', steelblue: '4682b4', tan: 'd2b48c', teal: '008080', thistle: 'd8bfd8', tomato: 'ff6347', turquoise: '40e0d0', violet: 'ee82ee', violetred: 'd02090', wheat: 'f5deb3', white: 'ffffff', whitesmoke: 'f5f5f5', yellow: 'ffff00', yellowgreen: '9acd32'};
 
 var assetJSON = $.parseJSON(availableProperties);
+console.log('availabeProperties: ', assetJSON);
 
 /**
-for testing 
 
-Notes: exits as soon as there is a duplicate on add. So, need to modfiy logic to get devices, and turn those into "Set" instead of "Add"
+Test device data:
 
-
-Add:
 G7-872-0E1-6026|1234-Outback|4S4BSANC8G3267435
 G7-062-0E1-995C|EY JEEP|1J4GW58N01C724128
 G7-4F2-0E2-CE47|GPSPRO NISSAN|1N6AD0CW5CC468606
@@ -27,6 +25,16 @@ G8-852-0EA-337E|SCC SHOP TRUCK F250|
 G7-2E2-0DC-6AB8|T-350 Service Van|1FBAX2CGXGKB12084
 G7-0A2-0DC-6A9C|Truck SY|1FTEW1EG6FKD43781
 G8-912-0ED-A4F8|Village|1C4PJMCB5JD616237
+
+To-dos:
+
+0) Bug: if database is empty, unable to analyze.
+1) Handle duplicates, so that list can be either an update or an add depending on current database status
+2) Add more properties for device upload (engine hours, OdometerOffset(miles))
+3) Change format of expected input from Device Magic
+  - Eliminate the three '-'s from the serialNumber
+  - Change from '|'s as a divider? Tougher because names often have spaces.
+4) Host in an S3 bucket
 
 **/
 
@@ -73,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
+  //want to consolidate these two buttons into one
   document.getElementById("runEdit").addEventListener("click", function(event){
     event.preventDefault();
     $("#outputArea").html("");
@@ -111,7 +120,6 @@ function checkForUserInput() {
   return true;
 };
 
-/** last step in chain **/
 function runAnalyze(parsedData, update){                
   var parseResult = '';
   var parsedDataLength = parsedData.length;
@@ -125,59 +133,42 @@ function runAnalyze(parsedData, update){
   $("#outputArea").html(parseResult);
   $("#status").text("Done Analysis");
 
-  if (update === true) {
-    runUpdate(parsedData,parsedDataLength);
-  } else if (update === 'add') {
-    runAdd(parsedData,parsedDataLength);
+  if (update) {
+    runUpdate(parsedData,parsedDataLength);    
   } else {
     alert("Assets have been analyzed. Please review the Output box.");
     parsedData.length = 0;
   }
 }
-/************************/
-
-function runAdd(assetData, totalCount) {
-  var assetType =  $('#expectedInputSelectorContainer label').attr('id');
-  assetType = assetType.slice(0, -6);
-  var addCalls = buildAdd(assetData,totalCount,assetType);
-
-  console.log(addCalls);
-
-  if (addCalls.length > 0) {
-    $("#status").text("Updating Devices");
-    runCalls(addCalls,"add",assetType,null);
-  } else {
-    alert("No Valid "+ assetType + " entries");         
-  }
-  assetData.length = 0;
-}
-
-function buildAdd(assetData,totalCount,assetType) {
-
-  $("#status").text("Building Update Calls");
-  var setMultiCall=[],assetLabel,tmpCall=[],updatedEntity;
-  for(var i = 0; i < totalCount; i++){
-    progressBarUpdate(i+1,totalCount);
-    if(assetData[i].valid){
-      assetLabel = assetData[i].label;
-      updatedEntity = $.extend(true,{},assetData[i][assetLabel]);
-
-      //is the entity in the wrong format?? Getting rejected by the API
-      updatedEntity.serialNumber = assetLabel;
-      tmpCall = ["Add", { typeName: assetType, entity: updatedEntity}];
-      setMultiCall.push(tmpCall);
-    }
-  }
-  return setMultiCall
-}
 
 function runUpdate(assetData, totalCount) {
   var assetType =  $('#expectedInputSelectorContainer label').attr('id');
   assetType = assetType.slice(0, -6);
-  var setCalls = buildSet(assetData,totalCount,assetType);
-  if (setCalls.length > 0) {
+
+  var setAssets = [];
+  var addAssets = [];
+  var thisAsset;
+  var label;
+
+  for (var i = 0; i < assetData.length; i++) {
+    thisAsset = assetData[i];
+    label = thisAsset.label;
+    if (assetCache.hasOwnProperty(label)) {
+      setAssets.push(thisAsset);
+    } else {
+      addAssets.push(thisAsset);
+    }
+  }  
+
+  var setCount = setAssets.length;
+  var setCalls = buildSet(setAssets,setCount,assetType);
+  var addCount = addAssets.length;
+  var addCalls = buildAdd(addAssets,addCount,assetType);
+  var multiCall = setCalls.concat(addCalls);
+
+  if (multiCall.length > 0) {
     $("#status").text("Updating Devices");
-    runCalls(setCalls,"set",assetType,null);
+    runCalls(multiCall,"update",assetType,null);
   } else {
     alert("No Valid "+ assetType + " entries");         
   }
@@ -226,10 +217,7 @@ function buildGet(assetType,totalCount,inputtedAssets) {
 
 function runCalls(calls,flag,assetType,callback) {
   api.multiCall(calls, function (result) {
-
-    console.log('multiCall result: ', result);
-
-    if (flag == "set") { $("#status").text("Succesfully Updated: " + result.length + " " + assetType); }
+    if (flag == "update") { $("#status").text("Succesfully Updated: " + result.length + " " + assetType); }
     else if (flag == "get") {
       for (var i = 0; i < result.length; i++) {
         if (result[i].length>0) {
@@ -298,7 +286,7 @@ function getActualInput(content, update){
   }
 }
 
-function parseActualInput(expectedAsset,totalCount,splitInput,update){          
+function parseActualInput(expectedAsset,totalCount,splitInput,update){      
   var expectedProperties = parseExpectedInput(),
     expectedPropertiesCount = expectedProperties.length,
     assetList = [],
@@ -334,89 +322,90 @@ function parseActualInput(expectedAsset,totalCount,splitInput,update){
           return false
       }
 
-      if (update === "add") {
-
-        label = thisAsset[0].split('-').join('');
-        tempAssetObject = {
-          label: label,
-          valid: true,
-          bad: false
-        };
-
-        tempAssetObject[assetMainTag] = {};
-        for (var j = 0; j < expectedPropertiesCount; j++) {
-          thisProperty = propertyCache[expectedProperties[j]].property;
-          tempAssetObject[assetMainTag][thisProperty] = thisAsset[j + 1];
-        }
-
-      } else if (!assetMainTag || !assetCache.hasOwnProperty(assetMainTag)) {
+      if (assetMainTag === false) {
         tempAssetObject = {
           label: thisAsset[0],
           valid: false,               
           bad: expectedAsset + " " + thisAsset[0] + " does not exist"
-        };
+        };  
+      } else {   
 
-      } else {
-        tempAssetObject = {
-          label: assetMainTag,
-          valid: true,                
-          bad: false
-        };
-        assetObjectClone = $.extend(true, {}, assetCache[assetMainTag]);
-        tempAssetObject[assetMainTag] = {};
-        
-        var badCount = 0;
-        
-        for(var j = 0; j < expectedPropertiesCount; j++){
-          thisProperty = propertyCache[expectedProperties[j]].property;
-          thisValue = getPropertyValue(thisAsset[j+1],propertyCache[expectedProperties[j]].propertyFunction);
-          
-          var badValue = thisValue.bad;
-          var validValue = thisValue.valid;
-          
-          if(validValue && !badValue){
+        if (!assetCache.hasOwnProperty(assetMainTag)) { //"add" 
+
+          tempAssetObject = {
+            label: assetMainTag,
+            valid: true,               
+            bad: false
+          };
+
+          tempAssetObject[assetMainTag] = {};
+          for (var j = 0; j < expectedPropertiesCount; j++) {
+            thisProperty = propertyCache[expectedProperties[j]].property;
+            thisValue = getPropertyValue(thisAsset[j+1],propertyCache[expectedProperties[j]].propertyFunction);
             tempAssetObject[assetMainTag][thisProperty] = thisValue.value;
-            if(thisProperty == 'isActiveTrackingEnabled'){
-              tempAssetObject[assetMainTag].parameterVersion = assetObjectClone.parameterVersion + 1;
-            }
-            if(thisProperty == 'userAuthenticationType' && thisValue.value == "SAML"){
-              tempAssetObject[assetMainTag].issuerCertificate = certificateCache;
-            }
-            if(thisProperty == 'keys'){
-              if(thisValue.value == "CLEAR"){
-                tempAssetObject[assetMainTag].keys = [];
+          }
+        } else { //"set"
+          tempAssetObject = {
+            label: assetMainTag,
+            valid: true,                
+            bad: false
+          };
+          assetObjectClone = $.extend(true, {}, assetCache[assetMainTag]);
+          tempAssetObject[assetMainTag] = {};
+          
+          var badCount = 0;
+          
+          for(var j = 0; j < expectedPropertiesCount; j++){
+            thisProperty = propertyCache[expectedProperties[j]].property;
+            thisValue = getPropertyValue(thisAsset[j+1],propertyCache[expectedProperties[j]].propertyFunction);
+            
+            var badValue = thisValue.bad;
+            var validValue = thisValue.valid;
+            
+            if(validValue && !badValue){
+              tempAssetObject[assetMainTag][thisProperty] = thisValue.value;
+              if(thisProperty == 'isActiveTrackingEnabled'){
+                tempAssetObject[assetMainTag].parameterVersion = assetObjectClone.parameterVersion + 1;
+              }
+              if(thisProperty == 'userAuthenticationType' && thisValue.value == "SAML"){
+                tempAssetObject[assetMainTag].issuerCertificate = certificateCache;
+              }
+              if(thisProperty == 'keys'){
+                if(thisValue.value == "CLEAR"){
+                  tempAssetObject[assetMainTag].keys = [];
+                }else{
+                  tempAssetObject[assetMainTag].keys = [thisValue.value];
+                }                   
+              }
+
+            }else if(!validValue && badValue){
+              badCount++;                 
+              if(tempAssetObject.bad === false){
+                tempAssetObject.bad = thisProperty + " : " + thisValue.value;
               }else{
-                tempAssetObject[assetMainTag].keys = [thisValue.value];
-              }                   
+                tempAssetObject.bad = tempAssetObject.bad + ", " + thisProperty + " : " + thisValue.value;
+              }
             }
+          }   
+          if(badCount >= expectedPropertiesCount){
+            tempAssetObject.valid = false;
 
-          }else if(!validValue && badValue){
-            badCount++;                 
-            if(tempAssetObject.bad === false){
-              tempAssetObject.bad = thisProperty + " : " + thisValue.value;
-            }else{
-              tempAssetObject.bad = tempAssetObject.bad + ", " + thisProperty + " : " + thisValue.value;
+          }else{
+            if(tempAssetObject[assetMainTag].groups !== undefined){
+              assetObjectClone.groups = [];
+            }else if(tempAssetObject[assetMainTag].companyGroups !== undefined){
+              assetObjectClone.companyGroups = [];
+              if(tempAssetObject[assetMainTag].driverGroups !== undefined || assetObjectClone.driverGroups !== undefined){
+                assetObjectClone.driverGroups = [];
+              }         
+            }
+            tempAssetObject[assetMainTag] =  $.extend(true,{},assetObjectClone,tempAssetObject[assetMainTag]);
+            if(tempAssetObject[assetMainTag].driverGroups !== undefined && JSON.stringify(tempAssetObject[assetMainTag].driverGroups) !== JSON.stringify(tempAssetObject[assetMainTag].companyGroups)){
+                $.extend(tempAssetObject[assetMainTag].driverGroups,tempAssetObject[assetMainTag].companyGroups);
             }
           }
-        }   
-        if(badCount >= expectedPropertiesCount){
-          tempAssetObject.valid = false;
-
-        }else{
-          if(tempAssetObject[assetMainTag].groups !== undefined){
-            assetObjectClone.groups = [];
-          }else if(tempAssetObject[assetMainTag].companyGroups !== undefined){
-            assetObjectClone.companyGroups = [];
-            if(tempAssetObject[assetMainTag].driverGroups !== undefined || assetObjectClone.driverGroups !== undefined){
-              assetObjectClone.driverGroups = [];
-            }         
-          }
-          tempAssetObject[assetMainTag] =  $.extend(true,{},assetObjectClone,tempAssetObject[assetMainTag]);
-          if(tempAssetObject[assetMainTag].driverGroups !== undefined && JSON.stringify(tempAssetObject[assetMainTag].driverGroups) !== JSON.stringify(tempAssetObject[assetMainTag].companyGroups)){
-              $.extend(tempAssetObject[assetMainTag].driverGroups,tempAssetObject[assetMainTag].companyGroups);
-          }
-        }
-      }           
+        }           
+      }
     } else {
       // Show valid counts, based upon mandatory email address (LMIT Aug 23 2016)                        
       tempAssetObject = {
@@ -891,24 +880,21 @@ function refreshTimeZoneCache(callback){
           });
 }
 
-function refreshAssetCache(expectedAssetType,totalCount,inputtedAssets, update){
+function refreshAssetCache(expectedAssetType,totalCount,inputtedAssets,update){
   api.call("GetCountOf", {
     typeName: expectedAssetType
   }, function(result) {
-    //new route for add
-    console.log('update: ', update);
-    if (result !== undefined && update === "add") {
-      parseActualInput(expectedAssetType, totalCount, inputtedAssets, update);
-    }
-
     if (result !== undefined && result > 0) {
       assetCache = {};
       if (result > 10 && totalCount/result < 0.5) {
         var calls = buildGet(expectedAssetType,totalCount,inputtedAssets);
-        return runCalls(calls,"get",expectedAssetType,function(){ parseActualInput(expectedAssetType,totalCount,inputtedAssets,update); });
+        return runCalls(calls,"get",expectedAssetType,function(){parseActualInput(expectedAssetType,totalCount,inputtedAssets,update);});
       } else {
-        return getAssets(expectedAssetType,function(){ parseActualInput(expectedAssetType,totalCount,inputtedAssets,update); });
+        return getAssets(expectedAssetType,function(){parseActualInput(expectedAssetType,totalCount,inputtedAssets,update);});
       }
+    } else if (result === 0) {
+      assetCache = {}
+      parseActualInput(expectedAssetType, totalCount, inputtedAssets, update);
     }
   }, function(error) {
     console.log(error);
