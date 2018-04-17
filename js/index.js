@@ -7,33 +7,9 @@ console.log('availabeProperties: ', assetJSON);
 
 /**
 
-Test device data:
-
-G7-872-0E1-6026|1234-Outback|4S4BSANC8G3267435
-G7-062-0E1-995C|EY JEEP|1J4GW58N01C724128
-G7-4F2-0E2-CE47|GPSPRO NISSAN|1N6AD0CW5CC468606
-G7-442-0DF-C540|GPSPRO-HHR Vegas|3GNBABDB1AS501655
-G7-B62-0E7-3F3C|GPSPRO-National Sales 1|1FMJU2A52EEF63135
-G7-A32-0E1-F092|GPSPRO-Out of Service|1D4PU4GK1BW546472
-G7-BA2-0E7-3F30|GPSPRO-Reno Service|1D4PU4GKXBW554389
-G7-992-0DF-C69C|GPSPRO2- HHR|3GCDA15D97S626116
-G7-6D2-0DF-C569|HHR- SO CAL|3GNBAADB6AS507218
-G8-612-0ED-A408|KS JEEP|1C4PJMABXHW656878
-G8-FC2-0E9-FCC9|Lakeside|1C4PJMCB8JD515306
-G8-DB2-0ED-B3A3|Northwest|1C4PJMCB0JD535680
-G8-852-0EA-337E|SCC SHOP TRUCK F250|
-G7-2E2-0DC-6AB8|T-350 Service Van|1FBAX2CGXGKB12084
-G7-0A2-0DC-6A9C|Truck SY|1FTEW1EG6FKD43781
-G8-912-0ED-A4F8|Village|1C4PJMCB5JD616237
-
 To-dos:
 
-0) Bug: if database is empty, unable to analyze.
-1) Handle duplicates, so that list can be either an update or an add depending on current database status
 2) Add more properties for device upload (engine hours, OdometerOffset(miles))
-3) Change format of expected input from Device Magic
-  - Eliminate the three '-'s from the serialNumber
-  - Change from '|'s as a divider? Tougher because names often have spaces.
 4) Host in an S3 bucket
 
 **/
@@ -88,15 +64,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (checkForUserInput()) {
       var content = document.getElementById("inputArea").value;
       getActualInput(content, true);
-    }
-  });
-
-  document.getElementById("runAdd").addEventListener("click", function(event){
-    event.preventDefault();
-    $("#outputArea").html("");
-    if (checkForUserInput()) {
-      var content = document.getElementById("inputArea").value;
-      getActualInput(content, "add");
     }
   });
 
@@ -299,7 +266,7 @@ function parseActualInput(expectedAsset,totalCount,splitInput,update){
     thisValue;
 
   for (var i = 0; i < totalCount; i++) {
-    thisAsset = splitInput[i].split("|");
+    thisAsset = splitInput[i].split('\t');
     propertiesCount = thisAsset.length;
       
     if (propertiesCount - 1 == expectedPropertiesCount) {
